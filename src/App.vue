@@ -4,48 +4,49 @@
       <button @click="addFish">Add 10 Fish</button>
       <span>fish count = {{ fishCount }}</span>
     </div>
-    <FishStage :maxFish="maxFish" @count-changed="fishCountChanged"  />
+    <FishStage :maxFish="maxFish" @count-changed="fishCountChanged" />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import FishStage from './components/FishStage.vue'
+import { defineComponent } from "vue";
+import FishStage from "./components/FishStage.vue";
 
 export default defineComponent({
-  name: 'App',
+  name: "App",
   components: {
-    FishStage
+    FishStage,
   },
   data() {
     return {
       maxFish: 50,
-      fishCount: 0
-    }
+      fishCount: 0,
+    };
   },
   methods: {
     addFish() {
-      this.maxFish += 10
+      this.maxFish += 10;
     },
     fishCountChanged(count: number) {
-      this.fishCount = count
-    }
-  }
-})
+      this.fishCount = count;
+    },
+  },
+});
 </script>
 
 <style lang="scss">
 * {
   box-sizing: border-box;
 }
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   position: relative;
   height: 100%;
   background-color: rgb(31, 36, 43);
   color: rgb(80, 110, 124);
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
   overflow: hidden;
 }
 button {
@@ -53,7 +54,7 @@ button {
   margin-right: 5px;
   border: 2px solid rgb(80, 110, 124);
   color: rgb(80, 110, 124);
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
   padding: 2px 5px;
   background-color: transparent;
 }

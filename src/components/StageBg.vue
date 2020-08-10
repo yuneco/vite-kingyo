@@ -72,17 +72,16 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-
-.Stone.list-enter-from, .Stone.list-leave-to /* .list-leave-active for below version 2.1.8 */ {
+.Stone.list-enter-from, .Stone.list-leave-to {
   opacity: 0;
 }
 
 .Stone {
-    position: absolute;
-    border-radius: 100%;
-    opacity: 1;
-    transition: opacity 5s;
-  }
+  position: absolute;
+  border-radius: 100%;
+  opacity: 1;
+  transition: opacity 5s;
+}
 
 .StageBgRoot {
   position: absolute;
@@ -92,5 +91,4 @@ export default defineComponent({
   height: 100%;
   overflow: hidden;
 }
-
 </style>

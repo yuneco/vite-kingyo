@@ -28,6 +28,7 @@ import Wave from "./Wave.vue";
 import StageBg from "./StageBg.vue";
 import { Point } from "../core/Point";
 import { useMouse } from "../core/useMouse";
+import { useClick } from "../core/useClick";
 import { useTicker } from "../core/useTicker";
 import { useAnimationFrame } from "../core/useAnimationFrame";
 import { FishModel } from "../core/FishModel";
@@ -81,19 +82,17 @@ export default defineComponent({
       addWave(destination.x, destination.y);
     }, 100);
 
-    const startTime = Date.now();
-    const reuiredFishCount = () => {
-      const sec = (Date.now() - startTime) / 1000;
-      return Math.min(props.maxFish, sec * ADD_FISH_PER_SEC);
-    };
-
     useAnimationFrame(() => {
       updateFish();
-      const reqFishes = reuiredFishCount();
-      if (fishCount.value < reqFishes) {
+      if (fishCount.value < props.maxFish) {
         addFish();
       }
       return true;
+    });
+
+    useClick(() => {
+      stageState.fishList.forEach((fish) => fish.setForce(-1 - Math.random() * 4));
+      addWave(destination.x, destination.y);
     });
 
     return {

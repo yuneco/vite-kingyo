@@ -1,12 +1,12 @@
-import { Point } from './Point'
+import { Point } from "./Point";
 
-let instanseCount = 0
+let instanseCount = 0;
 
 export class WaveModel {
-  readonly id = instanseCount++
-  readonly position: Point
+  readonly id = instanseCount++;
+  readonly position: Point;
 
   constructor(p: Point) {
-    this.position = p
+    this.position = p;
   }
 }
