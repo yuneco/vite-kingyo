@@ -2,6 +2,7 @@
   <div id="app">
     <div class="Control">
       <button @click="addFish">Add 10 Fish</button>
+      <button @click="removeFish">Remove 10 Fish</button>
       <span>fish count = {{ fishCount }}</span>
     </div>
     <Stage :maxFish="maxFish" @count-changed="fishCountChanged" />
@@ -26,6 +27,9 @@ export default defineComponent({
   methods: {
     addFish() {
       this.maxFish += 10;
+    },
+    removeFish() {
+      this.maxFish = Math.max(0, this.maxFish - 10);
     },
     fishCountChanged(count: number) {
       this.fishCount = count;

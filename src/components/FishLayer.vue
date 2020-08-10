@@ -36,7 +36,7 @@ export default defineComponent({
   name: "FishLayer",
   components: { Fish },
   props: {
-    /** 最大金魚数：この数まで金魚が追加されます。減らしても一度追加された金魚は減りません */
+    /** 最大金魚数：この数まで金魚が追加されます */
     maxFish: { type: Number, default: 50 },
   },
   setup(props, ctx) {
@@ -63,11 +63,18 @@ export default defineComponent({
       ctx.emit("count-changed", fishCount.value);
     };
 
+    const removeFish = () => {
+      stageState.fishList.shift();
+      ctx.emit("count-changed", fishCount.value);
+    }
+
     // 描画フレームごとに呼ばれる処理。金魚の状態を更新する
     useAnimationFrame(() => {
       updateFish();
       if (fishCount.value < props.maxFish) {
         addFish();
+      } else if (fishCount.value > props.maxFish) {
+        removeFish();
       }
       // trueを返すとunmountまでの間繰り返し呼ばれる
       return true;
