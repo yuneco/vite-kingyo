@@ -1,5 +1,6 @@
 <template>
-  <StageBg class="FishStageRoot">
+  <!-- 指定の匹数の金魚を表示するレイヤーです -->
+  <div class="FishLayerRoot">
     <Fish
       v-for="fishProps in stageState.fishList"
       :key="fishProps.id"
@@ -9,23 +10,13 @@
       :angle="fishProps.angle"
       :color="fishProps.color"
       :scale="fishProps.scale"
-    ></Fish>
-    <Wave
-      v-for="waveProps in stageState.waveList"
-      class="WaveElement"
-      :key="waveProps.id"
-      :x="waveProps.position.x"
-      :y="waveProps.position.y"
-      @end="removeWave(waveProps)"
     />
-  </StageBg>
+  </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, reactive, computed, ref, onMounted } from "vue";
 import { Fish } from "./Fish";
-import Wave from "./Wave.vue";
-import StageBg from "./StageBg.vue";
 import { Point } from "../core/Point";
 import { useMouse } from "../core/useMouse";
 import { useClick } from "../core/useClick";
@@ -34,77 +25,76 @@ import { useAnimationFrame } from "../core/useAnimationFrame";
 import { FishModel } from "../core/FishModel";
 import { WaveModel } from "../core/WaveModel";
 
-const ADD_FISH_PER_SEC = 16;
-
+/**
+ * 金魚レイヤーの状態を管理する型
+ */
 type StageState = {
   fishList: FishModel[];
-  waveList: WaveModel[];
 };
 
 export default defineComponent({
-  name: "FishStage",
-  components: { Fish, Wave, StageBg },
+  name: "FishLayer",
+  components: { Fish },
   props: {
+    /** 最大金魚数：この数まで金魚が追加されます。減らしても一度追加された金魚は減りません */
     maxFish: { type: Number, default: 50 },
   },
   setup(props, ctx) {
-    const { mousePos: destination } = useMouse();
+    // state: レイヤーの状態
     const stageState = reactive<StageState>({
       fishList: [],
-      waveList: [],
     });
+
+    // state: マウスの座標を状態として利用
+    const { mousePos: destination } = useMouse();
+    
+    // computed: 現在の金魚数
     const fishCount = computed(() => stageState.fishList.length);
+
+    // method: 金魚の位置や速度を更新するメソッド
     const updateFish = () => {
       const destPoint = new Point(destination.x, destination.y);
       stageState.fishList.forEach((fish) => fish.update(destPoint));
     };
 
+    // method: 金魚を追加するメソッド
     const addFish = () => {
       stageState.fishList.push(new FishModel());
       ctx.emit("count-changed", fishCount.value);
     };
 
-    const addWave = (x: number, y: number) => {
-      const RND = 100;
-      const rndX = (Math.random() - 0.5) * RND;
-      const rndY = (Math.random() - 0.5) * RND;
-      stageState.waveList.push(new WaveModel(new Point(x + rndX, y + rndY)));
-    };
-
-    const removeWave = (wave: WaveModel) => {
-      stageState.waveList = stageState.waveList.filter((w) => w !== wave);
-    };
-
-    useTicker(() => {
-      if (Math.random() < 0.93) {
-        return;
-      }
-      addWave(destination.x, destination.y);
-    }, 100);
-
+    // 描画フレームごとに呼ばれる処理。金魚の状態を更新する
     useAnimationFrame(() => {
       updateFish();
       if (fishCount.value < props.maxFish) {
         addFish();
       }
+      // trueを返すとunmountまでの間繰り返し呼ばれる
       return true;
     });
 
+    // クリック時の処理。金魚が逃げるようカーソル方向と逆の力を与える
     useClick(() => {
-      stageState.fishList.forEach((fish) => fish.setForce(-1 - Math.random() * 4));
-      addWave(destination.x, destination.y);
+      stageState.fishList.forEach((fish) =>
+        fish.setForce(-1 - Math.random() * 4)
+      );
     });
 
     return {
       stageState,
-      addWave,
-      removeWave,
     };
   },
 });
 </script>
 
 <style scoped lang="scss">
+.FishLayerRoot {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
 .FishElement {
   box-sizing: border-box;
   position: absolute;
@@ -145,8 +135,5 @@ export default defineComponent({
     background-color: #333;
     border-radius: 3px;
   }
-}
-.WaveElement {
-  color: rgb(129, 170, 189);
 }
 </style>

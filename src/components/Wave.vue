@@ -1,13 +1,12 @@
 <template>
-  <div class="">
-    <div
-      class="WaveRoot"
-      :style="{
-        left: `${x - 50}px`,
-        top: `${y - 50}px`,
-      }"
-    ></div>
-  </div>
+  <!-- 波紋を表示するコンポーネントです -->
+  <div
+    class="WaveRoot"
+    :style="{
+      left: `${x - 50}px`,
+      top: `${y - 50}px`,
+    }"
+  />
 </template>
 
 <script lang="ts">

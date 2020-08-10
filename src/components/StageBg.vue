@@ -1,4 +1,5 @@
 <template>
+  <!-- 背景を描画するコンポーネントです -->
   <div class="StageBgRoot">
     <transition-group name="list">
       <div

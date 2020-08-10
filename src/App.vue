@@ -4,18 +4,18 @@
       <button @click="addFish">Add 10 Fish</button>
       <span>fish count = {{ fishCount }}</span>
     </div>
-    <FishStage :maxFish="maxFish" @count-changed="fishCountChanged" />
+    <Stage :maxFish="maxFish" @count-changed="fishCountChanged" />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import FishStage from "./components/FishStage.vue";
+import Stage from "./components/Stage.vue";
 
 export default defineComponent({
   name: "App",
   components: {
-    FishStage,
+    Stage,
   },
   data() {
     return {
